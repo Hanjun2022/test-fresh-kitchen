@@ -1,11 +1,19 @@
 #!/bin/bash
 set -e
 
-# 1. 환경 변수 설정 (맨 위에 위치해야 합니다)
+
 export ECR_REGISTRY="339713026502.dkr.ecr.us-east-1.amazonaws.com"
 export ECR_REPOSITORY="fresh-kitchen"
 export IMAGE_TAG="latest"
 export AWS_REGION="us-east-1"
+
+# Parameter Store에서 값 가져오기
+echo "▶ Parameter Store에서 환경변수 로드"
+export DB_URL=$(aws ssm get-parameter --name "/fresh-kitchen/DB_URL" --with-decryption --query Parameter.Value --output text --region $AWS_REGION)
+export DB_USERNAME=$(aws ssm get-parameter --name "/fresh-kitchen/DB_USERNAME" --with-decryption --query Parameter.Value --output text --region $AWS_REGION)
+export DB_PASSWORD=$(aws ssm get-parameter --name "/fresh-kitchen/DB_PASSWORD" --with-decryption --query Parameter.Value --output text --region $AWS_REGION)
+
+
 
 echo "------------------ 서버 배포 시작 --------------------------------"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
