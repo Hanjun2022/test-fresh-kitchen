@@ -3,7 +3,7 @@ name: EC2 처음 배포2
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
